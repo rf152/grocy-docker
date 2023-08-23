@@ -1,0 +1,21 @@
+version: '2'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  phpfpm:
+    image: ghcr.io/rf152/grocy:4.0.2
+    networks:
+      - app-tier
+  nginx:
+    image: ghcr.io/rf152/grocy-frontend:4.0.2
+    depends_on:
+      - phpfpm
+    networks:
+      - app-tier
+    ports:
+      - '8280:8180'
+    volumes:
+      - ./server_blocks:/opt/bitnami/nginx/conf/server_blocks
